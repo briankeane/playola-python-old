@@ -6,6 +6,7 @@ from pydantic_settings import BaseSettings
 
 log = logging.getLogger("uvicorn")
 
+
 class Settings(BaseSettings):
     environment: str = "dev"
     testing: bool = bool(0)

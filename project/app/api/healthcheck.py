@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from app.config import get_settings, Settings
+from app.config import Settings, get_settings
 
 router = APIRouter()
 
@@ -10,5 +10,5 @@ async def healthcheck(settings: Settings = Depends(get_settings)):
     return {
         "responds": True,
         "environment": settings.environment,
-        "testing": settings.testing
+        "testing": settings.testing,
     }
