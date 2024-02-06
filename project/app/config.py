@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     environment: str = "dev"
     testing: bool = bool(0)
     database_url: AnyUrl = None
+    spotify_client_id: str = "SPOTIFY_CLIENT_ID"
+    spotify_client_secret: str = "SPOTIFY_CLIENT_SECRET"
+    
 
 
 @lru_cache
