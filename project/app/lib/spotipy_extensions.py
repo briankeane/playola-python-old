@@ -17,20 +17,15 @@ class UserSpecificCacheHandler(CacheHandler):
         self.curator.save()
 
 
-async def create_user_specific_spotify(spotify_user_id):
-    curator = await Curator.filter(spotify_user_id=spotify_user_id).first()
-    cache_handler = UserSpecificCacheHandler(curator=curator)
-    settings = get_settings()
-
-    return SpotifyOAuth(
-        client_id=settings.spotify_client_id,
-        client_secret=settings.spotify_client_secret,
-        redirect_uri="http://localhost:8004/v1/auth/spotify/code",
-        cache_handler=cache_handler,
-    )
-
-
 class UserSpecificSpotify(Spotify):
-    def __init__(self, cache_handler):
-        self.cache_handler = cache_handler
-        super().__init__()
+    def __init__(self, curator: Curator):
+        print("curator.spotify_token_info", curator.spotify_token_info)
+        cache_handler = UserSpecificCacheHandler(curator=curator)
+        settings = get_settings()
+        spotify_oath = SpotifyOAuth(
+            client_id=settings.spotify_client_id,
+            client_secret=settings.spotify_client_secret,
+            redirect_uri=settings.spotify_redirect_uri,
+            cache_handler=cache_handler,
+        )
+        super().__init__(oauth_manager=spotify_oath)
