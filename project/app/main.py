@@ -1,6 +1,6 @@
 import logging
 
-from app.api import artists, healthcheck, spotify_auth
+from app.api import curators, healthcheck, spotify_auth
 from app.db import init_db
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,7 +12,7 @@ def create_application() -> FastAPI:
     application = FastAPI()
     application.include_router(healthcheck.router)
     application.include_router(spotify_auth.router)
-    application.include_router(artists.router)
+    application.include_router(curators.router)
 
     return application
 

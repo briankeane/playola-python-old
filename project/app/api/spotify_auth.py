@@ -1,5 +1,5 @@
-from app.artists.artist import create_artist
 from app.config import Settings, get_settings
+from app.curators.curator import create_curator
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
 from spotipy import oauth2
@@ -32,8 +32,8 @@ async def spotifyAuthCode(code: str, settings: Settings = Depends(get_settings))
         scope=scopes,
         cache_path=".spotipyoauthcache",
     )
-    access_token = sp_oauth.get_access_token(code)["access_token"]
-    return await create_artist(access_token)
+    response = sp_oauth.get_access_token(code)
+    return await create_curator(token_info=response)
 
 
 @router.get("/v1/auth/spotify/authorize")

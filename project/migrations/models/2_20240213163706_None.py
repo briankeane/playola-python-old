@@ -3,10 +3,10 @@ from tortoise import BaseDBAsyncClient
 
 async def upgrade(db: BaseDBAsyncClient) -> str:
     return """
-        CREATE TABLE IF NOT EXISTS "artist" (
+        CREATE TABLE IF NOT EXISTS "curator" (
     "id" SERIAL NOT NULL PRIMARY KEY,
-    "spotify_access_token" VARCHAR(512) NOT NULL,
-    "spotify_id" VARCHAR(512) NOT NULL,
+    "spotify_token_info" JSONB NOT NULL,
+    "spotify_user_id" VARCHAR(512) NOT NULL,
     "spotify_display_name" VARCHAR(512) NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP
 );

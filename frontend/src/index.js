@@ -7,6 +7,7 @@ import {
 import './index.css';
 import App from './App';
 import ArtistList from './Components/ArtistList.jsx';
+import ArtistDetail from './Components/ArtistDetail.jsx';
 import reportWebVitals from './reportWebVitals';
 
 
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     element: <ArtistList />
+  },
+  {
+    path: "/artists/:artistId",
+    element: <ArtistDetail />
   }
 ])
 const root = ReactDOM.createRoot(document.getElementById('root'));
