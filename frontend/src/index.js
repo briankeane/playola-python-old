@@ -1,31 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import './index.css';
-import App from './App';
-import ArtistList from './Components/ArtistList.jsx';
-import ArtistDetail from './Components/ArtistDetail.jsx';
-import reportWebVitals from './reportWebVitals';
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./index.css";
+import App from "./App";
+import CuratorList from "./Components/CuratorList.jsx";
+import CuratorDetail from "./Components/CuratorDetail.jsx";
+import reportWebVitals from "./reportWebVitals";
 
 const router = createBrowserRouter([
   {
-    path: "/artistSignIn",
-    element: <App />
+    path: "/curatorSignIn",
+    element: <App />,
   },
   {
     path: "/admin",
-    element: <ArtistList />
+    element: <CuratorList />,
   },
   {
-    path: "/artists/:artistId",
-    element: <ArtistDetail />
-  }
-])
-const root = ReactDOM.createRoot(document.getElementById('root'));
+    path: "/curators/:curatorId",
+    element: <CuratorDetail />,
+  },
+]);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
