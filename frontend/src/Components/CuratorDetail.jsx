@@ -46,7 +46,7 @@ function CuratorDetail() {
       setImportantTracks(result.data);
     };
     fetchArtists();
-  }, []);
+  }, [curatorId]);
 
   return (
     <div className="CuratorDetail">
