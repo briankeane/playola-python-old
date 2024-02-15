@@ -1,6 +1,6 @@
 // import './CuratorList.css';
 import React, { useEffect, useState } from "react";
-import { Link, generatePath } from "react-router-dom";
+import { Link } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";

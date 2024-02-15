@@ -1,6 +1,6 @@
 // import './ArtistList.css';
 import React, { useEffect, useState } from "react";
-import { Link, generatePath, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -31,33 +31,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 function CuratorDetail() {
-  const [artists, setArtists] = useState([]);
   const [importantTracks, setImportantTracks] = useState([]);
 
   const { curatorId } = useParams();
 
-  const fetchArtists = async () => {
-    const result = await axios.get(
-      `http://localhost:8004/v1/curators/${curatorId}/importantTracks`,
-      { mode: "no-cors" }
-    );
-    console.log(result);
-    setImportantTracks(result.data);
-  };
   useEffect(() => {
+    const fetchArtists = async () => {
+      const result = await axios.get(
+        `http://localhost:8004/v1/curators/${curatorId}/importantTracks`,
+        { mode: "no-cors" }
+      );
+      console.log(result);
+      setImportantTracks(result.data);
+    };
     fetchArtists();
   }, []);
 
