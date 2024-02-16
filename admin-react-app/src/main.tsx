@@ -7,6 +7,7 @@ import CuratorDetail from './Components/CuratorDetail.tsx';
 import './index.css';
 import CuratorList from './Components/CuratorList.tsx';
 import CuratorSignIn from './Components/CuratorSignIn.tsx';
+import CuratorSignedIn from './Components/CuratorSignedIn.tsx';
 
 const router = createBrowserRouter([
   {
@@ -14,10 +15,14 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      {
-        path: "curatorSignIn",
-        element: <CuratorSignIn />
-      },
+        {
+          path: "curatorSignIn",
+          element: <CuratorSignIn />
+        },
+        {
+          path: "curatorSignedIn",
+          element: <CuratorSignedIn />
+        },
       {
         path: "curators",
         element: <CuratorList />,
