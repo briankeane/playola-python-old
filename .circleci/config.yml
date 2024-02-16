@@ -19,7 +19,7 @@ workflows:
       - build:
           filters:
             branches:
-              only: main
+              ignore: main
 
   # lint:
   #   jobs:
