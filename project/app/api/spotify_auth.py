@@ -28,7 +28,7 @@ async def spotifyAuthCode(code: str, settings: Settings = Depends(get_settings))
     sp_oauth = oauth2.SpotifyOAuth(
         settings.spotify_client_id,
         settings.spotify_client_secret,
-        f"{settings.client_base_url}/v1/auth/spotify/code",
+        f"{settings.base_url}/v1/auth/spotify/code",
         scope=scopes,
         cache_path=".spotipyoauthcache",
     )
