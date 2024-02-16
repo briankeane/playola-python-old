@@ -1,5 +1,4 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import Logo from '../assets/PlayolaIcon.svg';
 
 function PlayolaLogo(props: SvgIconProps) {
     return (

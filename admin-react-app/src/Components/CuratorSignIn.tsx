@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 
 function CuratorSignIn() {
   return (
-    <div style={{ 'background-color': 'black', 'justify-content': 'center'}}>
+    <div style={{ backgroundColor: 'black', justifyContent: 'center'}}>
       <Typography align='center'>
       <a href={`${import.meta.env.VITE_BACKEND_BASE_URL}/v1/auth/spotify/authorize`}>
         <Button

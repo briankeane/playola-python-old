@@ -49,8 +49,7 @@ function CuratorDetail() {
   useEffect(() => {
     const fetchCurators = async () => {
       const result = await axios.get(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}v1/curators/${curatorId}/importantTracks`,
-        { mode: "no-cors" }
+        `${import.meta.env.VITE_BACKEND_BASE_URL}v1/curators/${curatorId}/importantTracks`
       );
       console.log(result);
       setImportantTracks(result.data);
