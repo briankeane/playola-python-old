@@ -31,7 +31,6 @@ jobs:
       - checkout
       - run: touch .env # env files have to exist for docker-compose to work
       - run: docker-compose run server aerich init -t app.db.TORTOISE_ORM
-      - run: docker-compose run server aerich init-db
       - run: docker-compose run server python -m pytest
 
   # lint:
