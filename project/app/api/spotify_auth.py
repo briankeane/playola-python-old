@@ -34,7 +34,7 @@ async def spotifyAuthCode(code: str, settings: Settings = Depends(get_settings))
     )
     response = sp_oauth.get_access_token(code)
     return RedirectResponse(
-        "http://localhost:3000/curatorSignedIn", status_code=status.HTTP_302_FOUND
+        f"{settings.client_base_url}/curatorSignedIn", status_code=status.HTTP_302_FOUND
     )
     return await get_or_create_curator(token_info=response)
 
