@@ -16,10 +16,10 @@ workflows:
 
   test:
     jobs:
-      - build
+      - build:
           filters:
-              branches:
-                only: main
+            branches:
+              only: main
 
   # lint:
   #   jobs:
