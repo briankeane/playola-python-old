@@ -17,15 +17,25 @@ workflows:
   test:
     jobs:
       - build
-    branches:
-      ignore:
-        - master
+      filters:
+          branches:
+            ignore: main
 
   # lint:
   #   jobs:
   #     - lint
 
 jobs:
+  build-and-test:
+    machine: true
+    working_directory: ~/src
+
+    steps:
+      - checkout
+      - run: touch .env # env files have to exist for docker-compose to work
+      - run: docker-compose run server aerich init -t app.db.TORTOISE_ORM
+      - run: docker-compose run server python -m pytest
+  
   build:
     machine: true
     working_directory: ~/src
@@ -35,6 +45,7 @@ jobs:
       - run: touch .env # env files have to exist for docker-compose to work
       - run: docker-compose run server aerich init -t app.db.TORTOISE_ORM
       - run: docker-compose run server python -m pytest
+
 
   # lint:
   #   machine: true
