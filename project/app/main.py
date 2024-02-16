@@ -1,10 +1,9 @@
 import logging
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
 from app.api import curators, healthcheck, spotify_auth
 from app.db import init_db
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 log = logging.getLogger("uvicorn")
 
@@ -19,7 +18,11 @@ def create_application() -> FastAPI:
 
 
 app = create_application()
-origins = ["http://localhost:3000", "https://localhost:3000"]
+origins = [
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "https://admin.playola.fm",
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
