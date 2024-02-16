@@ -28,12 +28,16 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
-  react:
+  admin-react:
     build: 
-      context: ./frontend
+      context: ./admin-react-app
       dockerfile: Dockerfile
-    command: npm start
+    command: npm run dev
     volumes:
-      - ./frontend:/usr/src/app
+      - ./admin-react-app:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - VITE_BACKEND_BASE_URL=$VITE_BACKEND_BASE_URL
     ports:
       - 3000:3000
+      - 3010:3010
