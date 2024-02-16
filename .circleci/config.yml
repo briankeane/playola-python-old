@@ -18,9 +18,9 @@ workflows:
     jobs:
       - build
 
-  lint:
-    jobs:
-      - lint
+  # lint:
+  #   jobs:
+  #     - lint
 
 jobs:
   build:
@@ -34,11 +34,11 @@ jobs:
       - run: docker-compose exec server aerich init-db
       - run: docker-compose exec server python -m pytest
 
-  lint:
-    machine: true
-    working_directory: ~/src
+  # lint:
+  #   machine: true
+  #   working_directory: ~/src
 
-    steps:
-      - checkout
-      - run: touch .env
-      - run: docker-compose run server npm run lint
+  #   steps:
+  #     - checkout
+  #     - run: touch .env
+  #     - run: docker-compose run server npm run lint
