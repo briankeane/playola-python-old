@@ -40,13 +40,11 @@ async def spotifyAuthCode(code: str, settings: Settings = Depends(get_settings))
 
 
 @router.get("/v1/auth/spotify/authorize")
-async def spotifyAuthRedirect(
-    settings: Settings = Depends(get_settings), redirect_uri: str = "http://thisisatest"
-):
+async def spotifyAuthRedirect(settings: Settings = Depends(get_settings)):
     sp_oauth = oauth2.SpotifyOAuth(
         settings.spotify_client_id,
         settings.spotify_client_secret,
-        "http://localhost:8004/v1/auth/spotify/code",
+        f"{settings.base_url}/v1/auth/spotify/code",
         scope=scopes,
         cache_path=".spotipyoauthcache",
     )
