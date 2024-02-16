@@ -18,8 +18,8 @@ workflows:
     jobs:
       - build
         filters:
-            branches:
-              ignore: main
+          branches:
+            ignore: main
 
   # lint:
   #   jobs:
