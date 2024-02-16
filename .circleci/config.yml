@@ -1,4 +1,6 @@
 version: 2.1
+general:
+  build_dir: project/
 orbs:
   python: circleci/python@2.0.3
   heroku: circleci/heroku@2.0.0
