@@ -1,5 +1,4 @@
-// import './ArtistList.css';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -10,6 +9,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
+
+interface Track {
+    id: string
+    name: string
+    artists: [Artist]
+    popularity: number
+}
+
+interface Artist {
+    name: string
+}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -32,20 +42,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function CuratorDetail() {
-  const [importantTracks, setImportantTracks] = useState([]);
+  const [importantTracks, setImportantTracks] = useState<Track[]>([]);
 
   const { curatorId } = useParams();
 
   useEffect(() => {
-    const fetchArtists = async () => {
+    const fetchCurators = async () => {
       const result = await axios.get(
-        `http://localhost:8004/v1/curators/${curatorId}/importantTracks`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}v1/curators/${curatorId}/importantTracks`,
         { mode: "no-cors" }
       );
       console.log(result);
       setImportantTracks(result.data);
     };
-    fetchArtists();
+    fetchCurators();
   }, [curatorId]);
 
   return (

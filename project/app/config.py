@@ -9,11 +9,12 @@ log = logging.getLogger("uvicorn")
 
 class Settings(BaseSettings):
     environment: str = "dev"
+    base_url: str = "http://localhost:8004/"
     testing: bool = bool(0)
     database_url: AnyUrl = None
     spotify_client_id: str = "SPOTIFY_CLIENT_ID"
     spotify_client_secret: str = "SPOTIFY_CLIENT_SECRET"
-    spotify_redirect_uri: str = "http://localhost:8004/v1/auth/spotify/code"
+    spotify_redirect_uri: str = f"{base_url}/v1/auth/spotify/code"
 
 
 @lru_cache

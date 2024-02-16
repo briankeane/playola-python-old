@@ -1,19 +1,20 @@
-// import './CuratorList.css';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Button from "@mui/material/Button";
 import axios from "axios";
 
+interface Curator {
+    id: string
+    spotify_display_name: string
+}
+
 function CuratorList() {
   const [curators, setCurators] = useState([]);
 
   const fetchCurators = async () => {
-    const result = await axios.get("http://localhost:8004/v1/curators", {
-      mode: "no-cors",
-    });
-    console.log(result);
+    const result = await axios.get(`${import.meta.env.VITE_BACKEND_BASE_URL}/v1/curators`);
     setCurators(result.data);
   };
 
@@ -21,7 +22,7 @@ function CuratorList() {
     fetchCurators();
   }, []);
 
-  function curatorItem(curator) {
+  function curatorItem(curator: Curator) {
     return (
       <ListItem alignItems="flex-start">
         <Button
@@ -35,7 +36,7 @@ function CuratorList() {
       </ListItem>
     );
   }
-  var curatorListItems = curators.map((curator) => curatorItem(curator));
+  const curatorListItems = curators.map((curator) => curatorItem(curator));
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       {curatorListItems}
