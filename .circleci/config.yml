@@ -40,5 +40,5 @@ jobs:
 
     steps:
       - checkout
-      - run: touch ./server/.env
+      - run: touch .env
       - run: docker-compose run server npm run lint
