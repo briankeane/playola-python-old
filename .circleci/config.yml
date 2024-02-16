@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - checkout
-      - run: touch ./server/.env # env files have to exist for docker-compose to work
+      - run: touch .env # env files have to exist for docker-compose to work
       - run: docker-compose exec server aerich init -t app.db.TORTOISE_ORM
       - run: docker-compose exec server aerich init-db
       - run: docker-compose exec server python -m pytest
