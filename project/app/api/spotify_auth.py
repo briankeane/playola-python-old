@@ -28,11 +28,12 @@ async def spotifyAuthCode(code: str, settings: Settings = Depends(get_settings))
     sp_oauth = oauth2.SpotifyOAuth(
         settings.spotify_client_id,
         settings.spotify_client_secret,
-        "{settings.client_base_url}/v1/auth/spotify/code",
+        f"{settings.client_base_url}/v1/auth/spotify/code",
         scope=scopes,
         cache_path=".spotipyoauthcache",
     )
     response = sp_oauth.get_access_token(code)
+    print(f"client_base_url {settings.client_base_url}")
     return RedirectResponse(
         f"{settings.client_base_url}/curatorSignedIn", status_code=status.HTTP_302_FOUND
     )
