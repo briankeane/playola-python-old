@@ -17,8 +17,9 @@ workflows:
   test:
     jobs:
       - build
-    ignore:
-      - master
+    branches:
+      ignore:
+        - master
 
   # lint:
   #   jobs:
