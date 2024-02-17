@@ -3,7 +3,6 @@ import json
 from typing import Optional
 
 import spotipy
-
 from app.lib.errors import ItemNotFoundException
 from app.lib.spotipy_extensions import UserSpecificSpotify
 from app.models.tortoise import Curator, CuratorTrack, Track
@@ -46,30 +45,28 @@ async def refresh_curators_important_tracks(curator_id: str):
     tracks = []
 
     for track_info in all_track_infos:
-        tracks.append(
-            await Track.get_or_create(
-                spotify_id=track_info["id"],
-                defaults={
-                    "album": parse_album(track_info),
-                    "artist": parse_artist(track_info),
-                    "duration_ms": track_info["duration_ms"],
-                    "isrc": parse_isrc(track_info),
-                    "title": track_info["name"],
-                    "popularity": track_info["popularity"],
-                    "spotify_image_link": parse_spotify_image_link(track_info),
-                },
-            )
+        (track, created) = await Track.get_or_create(
+            spotify_id=track_info["id"],
+            defaults={
+                "album": parse_album(track_info),
+                "artist": parse_artist(track_info),
+                "duration_ms": track_info["duration_ms"],
+                "isrc": parse_isrc(track_info),
+                "title": track_info["name"],
+                "popularity": track_info["popularity"],
+                "spotify_image_link": parse_spotify_image_link(track_info),
+            },
         )
+        tracks.append(track)
 
     curator_tracks = []
     for track in tracks:
-        curator_tracks.append(
-            CuratorTrack.get_or_create(
-                curator_id=curator.id,
-                track_id=track.id,
-                defaults={"date_last_seen": datetime.now()},
-            )
+        (track, created) = await CuratorTrack.get_or_create(
+            curator_id=curator.id,
+            track_id=track.id,
+            defaults={"date_last_seen": datetime.datetime.now()},
         )
+        curator_tracks.append(await track.fetch_related("curator", "track"))
 
     return curator_tracks
 
