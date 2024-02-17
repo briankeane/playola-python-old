@@ -1,6 +1,7 @@
 import json
 
 import spotipy
+
 from app.lib.errors import ItemNotFoundException
 from app.lib.spotipy_extensions import UserSpecificSpotify
 from app.models.tortoise import Curator
@@ -39,12 +40,13 @@ async def get_curators_important_tracks(curator_id: str):
 
 
 def remove_duplicates(tracks_list: list):
-    tracks_dict = {}
+    already_seen_ids = set()
     final_list = []
     for track in tracks_list:
-        if tracks_dict.get(track["id"]) is None:
-            tracks_dict[track["id"]] = True
+        if track["id"] not in already_seen_ids:
+            already_seen_ids.add(track["id"])
             final_list.append(track)
+            print(track["id"])
     return final_list
 
 
@@ -56,11 +58,4 @@ async def get_curator(id):
     curator = await Curator.filter(id=id).first()
     if curator is None:
         raise ItemNotFoundException
-    return curator
-    curator = await Curator.filter(id=id).first()
-    if curator is None:
-        raise ItemNotFoundException
-    return curator
-    return curator
-    return curator
     return curator

@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from app.api import curators, healthcheck, spotify_auth
 from app.db import init_db
@@ -18,11 +19,13 @@ def create_application() -> FastAPI:
 
 
 app = create_application()
+
 origins = [
     "http://localhost:3000",
     "https://localhost:3000",
     "https://admin.playola.fm",
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -31,13 +34,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.on_event("startup")
-async def startup_event():
-    log.info("Starting up...")
-    init_db(app)
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    log.info("Shutting down...")
+init_db(app)
