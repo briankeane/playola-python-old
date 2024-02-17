@@ -1,5 +1,5 @@
 from app.config import Settings, get_settings
-from app.lib.curator import get_all_curators, get_curator, get_curators_important_tracks
+from app.lib.curator import get_all_curators, refresh_curators_important_tracks
 from app.lib.errors import ItemNotFoundException
 from app.lib.spotipy_extensions import UserSpecificSpotify
 from app.models.tortoise import Curator
@@ -45,6 +45,6 @@ async def getCuratorsImportantTracks(
     curator_id: str, settings: Settings = Depends(get_settings)
 ):
     try:
-        return await get_curators_important_tracks(curator_id=curator_id)
+        return await refresh_curators_important_tracks(curator_id=curator_id)
     except ItemNotFoundException:
         return HTTPException(status_code=404, detail="Curator not found")

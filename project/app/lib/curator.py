@@ -1,41 +1,96 @@
+import datetime
 import json
+from typing import Optional
 
 import spotipy
+
 from app.lib.errors import ItemNotFoundException
 from app.lib.spotipy_extensions import UserSpecificSpotify
-from app.models.tortoise import Curator
+from app.models.tortoise import Curator, CuratorTrack, Track
 
 
-async def get_or_create_curator(token_info: dict):
+async def get_or_create_curator(token_info: dict) -> Curator:
     sp = spotipy.Spotify(auth=token_info["access_token"])
     user = sp.current_user()
-    curator = await Curator.filter(spotify_user_id=user["id"]).first()
-    if curator is None:
-        curator = await Curator.create(
-            spotify_token_info=token_info,
-            spotify_user_id=user["id"],
-            spotify_display_name=user["display_name"],
-        )
+    (curator, created) = await Curator.get_or_create(
+        spotify_user_id=user["id"],
+        defaults={
+            "spotify_token_info": token_info,
+            "spotify_display_name": user["display_name"],
+        },
+    )
+    print("curator: ", curator)
     return curator
 
 
-async def get_curators_important_tracks(curator_id: str):
+async def refresh_curators_important_tracks(curator_id: str):
     curator = await Curator.filter(id=curator_id).first()
     if curator is None:
         raise ItemNotFoundException
 
     sp = UserSpecificSpotify(curator=curator)
-    tracks_short_term = sp.current_user_top_tracks(limit=50, time_range="short_term")[
-        "items"
-    ]
-    tracks_medium_term = sp.current_user_top_tracks(limit=50, time_range="medium_term")[
-        "items"
-    ]
-    tracks_long_term = sp.current_user_top_tracks(limit=50, time_range="long_term")[
-        "items"
-    ]
+    track_infos_short_term = sp.current_user_top_tracks(
+        limit=50, time_range="short_term"
+    )["items"]
+    track_infos_medium_term = sp.current_user_top_tracks(
+        limit=50, time_range="medium_term"
+    )["items"]
+    track_infos_long_term = sp.current_user_top_tracks(
+        limit=50, time_range="long_term"
+    )["items"]
 
-    return remove_duplicates(tracks_short_term + tracks_medium_term + tracks_long_term)
+    all_track_infos = remove_duplicates(
+        track_infos_short_term + track_infos_medium_term + track_infos_long_term
+    )
+
+    tracks = []
+
+    for track_info in all_track_infos:
+        tracks.append(
+            await Track.get_or_create(
+                spotify_id=track_info["id"],
+                defaults={
+                    "album": parse_album(track_info),
+                    "artist": parse_artist(track_info),
+                    "duration_ms": track_info["duration_ms"],
+                    "isrc": parse_isrc(track_info),
+                    "title": track_info["name"],
+                    "popularity": track_info["popularity"],
+                    "spotify_image_link": parse_spotify_image_link(track_info),
+                },
+            )
+        )
+
+    curator_tracks = []
+    for track in tracks:
+        curator_tracks.append(
+            CuratorTrack.get_or_create(
+                curator_id=curator.id,
+                track_id=track.id,
+                defaults={"date_last_seen": datetime.now()},
+            )
+        )
+
+    return curator_tracks
+
+
+def parse_album(track_info) -> str:
+    return track_info["album"]["name"]
+
+
+def parse_artist(track_info) -> Optional[str]:
+    return track_info["artists"][0]["name"]
+
+
+def parse_isrc(track_info) -> Optional[str]:
+    return track_info.get("external_ids", {}).get("isrc", None)
+
+
+def parse_spotify_image_link(track_info) -> Optional[str]:
+    images = track_info["album"]["images"]
+    if not len(images):
+        return None
+    return images[0]
 
 
 def remove_duplicates(tracks_list: list):
@@ -56,11 +111,4 @@ async def get_curator(id):
     curator = await Curator.filter(id=id).first()
     if curator is None:
         raise ItemNotFoundException
-    return curator
-    curator = await Curator.filter(id=id).first()
-    if curator is None:
-        raise ItemNotFoundException
-    return curator
-    return curator
-    return curator
     return curator
