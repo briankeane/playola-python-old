@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
   server:
-    build: ./project
-    command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+    build: ./server
+    command: uvicorn playola.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
     volumes:
-      - ./project:/usr/src/app
+      - ./server:/usr/src/app
     ports:
       - 8004:8000
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
-      - DATABASE_URL=postgres://postgres:postgres@server-db:5432/server_dev
-      - DATABASE_TEST_URL=postgres://postgres:postgres@server-db:5432/server_test
+      - DATABASE_URL=postgresql://postgres:postgres@server-db:5432/server_dev
+      - DATABASE_TEST_URL=postgresql://postgres:postgres@server-db:5432/server_test
       - SPOTIFY_CLIENT_ID=$SPOTIFY_CLIENT_ID
       - SPOTIFY_CLIENT_SECRET=$SPOTIFY_CLIENT_SECRET
     depends_on:
@@ -20,7 +20,7 @@ services:
 
   server-db:
     build:
-      context: ./project/db
+      context: ./db
       dockerfile: Dockerfile
     expose:
       - 5432

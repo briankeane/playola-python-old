@@ -12,3 +12,4 @@ flake8==7.0.0
 black==23.12.1
 isort==5.13.2
 spotipy==2.22.1
+asgi-correlation-id==4.3.0

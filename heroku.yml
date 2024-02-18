@@ -1,3 +1,3 @@
 build:
   docker:
-    web: project/Dockerfile.prod
+    web: server/Dockerfile.prod

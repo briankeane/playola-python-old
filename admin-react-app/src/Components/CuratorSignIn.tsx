@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 function CuratorSignIn() {
+  console.log('backend: ', import.meta.env.VITE_BACKEND_BASE_URL)
   return (
     <div style={{ backgroundColor: 'black', justifyContent: 'center'}}>
       <Typography align='center'>
