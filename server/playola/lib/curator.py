@@ -3,9 +3,10 @@ import json
 from typing import Optional
 
 import spotipy
-from app.lib.errors import ItemNotFoundException
-from app.lib.spotipy_extensions import UserSpecificSpotify
-from app.models.tortoise import Curator, CuratorTrack, Track
+
+from playola.lib.errors import ItemNotFoundException
+from playola.lib.spotipy_extensions import UserSpecificSpotify
+from playola.models.tortoise import Curator, CuratorTrack, Track
 
 
 async def get_or_create_curator(token_info: dict) -> Curator:

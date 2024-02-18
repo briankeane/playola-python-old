@@ -1,10 +1,11 @@
-from app.config import Settings, get_settings
-from app.lib.curator import get_all_curators, refresh_curators_important_tracks
-from app.lib.errors import ItemNotFoundException
-from app.lib.spotipy_extensions import UserSpecificSpotify
-from app.models.tortoise import Curator
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
+from playola.config import Settings, get_settings
+from playola.lib.curator import get_all_curators, refresh_curators_important_tracks
+from playola.lib.errors import ItemNotFoundException
+from playola.lib.spotipy_extensions import UserSpecificSpotify
+from playola.models.tortoise import Curator
+from playola.models.tortoise import Curator
 from spotipy import Spotify, oauth2
 from starlette import status
 

@@ -1,6 +1,7 @@
-from app.config import get_settings
-from app.models.tortoise import Curator
 from spotipy import CacheHandler, Spotify, SpotifyOAuth
+
+from playola.config import get_settings
+from playola.models.tortoise import Curator
 
 
 class UserSpecificCacheHandler(CacheHandler):

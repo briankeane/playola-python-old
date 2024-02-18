@@ -1,10 +1,9 @@
 import os
 
 import pytest
+from playola.config import Settings, get_settings
+from playola.main import create_application
 from starlette.testclient import TestClient
-
-from app.config import Settings, get_settings
-from app.main import create_application
 
 
 def get_settings_override():

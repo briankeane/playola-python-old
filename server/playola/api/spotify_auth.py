@@ -1,7 +1,7 @@
-from app.config import Settings, get_settings
-from app.lib.curator import get_or_create_curator
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
+from playola.config import Settings, get_settings
+from playola.lib.curator import get_or_create_curator
 from spotipy import oauth2
 from starlette import status
 
