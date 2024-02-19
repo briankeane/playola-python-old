@@ -47,7 +47,6 @@ async def spotifyAuthRedirect(settings: Settings = Depends(get_settings)):
         settings.spotify_client_secret,
         f"{settings.base_url}/v1/auth/spotify/code",
         scope=scopes,
-        cache_path=".spotipyoauthcache",
     )
 
     return RedirectResponse(
