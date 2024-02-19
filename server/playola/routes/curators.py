@@ -1,22 +1,28 @@
-from app.config import Settings, get_settings
-from app.lib.curator import get_all_curators, get_curator, get_curators_important_tracks
-from app.lib.errors import ItemNotFoundException
-from app.lib.spotipy_extensions import UserSpecificSpotify
-from app.models.tortoise import Curator
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
+from playola.config import Settings, get_settings
+from playola.lib.curator import (
+    get_all_curators,
+    get_curator,
+    refresh_curators_important_tracks,
+)
+from playola.lib.errors import ItemNotFoundException
+from playola.lib.spotipy_extensions import UserSpecificSpotify
+from playola.models.tortoise import (
+    Curator,
+    CuratorTrack,
+    CuratorTrack_Pydantic_List,
+    Track,
+)
 from spotipy import Spotify, oauth2
-from starlette import status
+
+# from playola.models.pydantic import CuratorTrackSchema
+
 
 router = APIRouter()
 
 scopes = ",".join(
     [
-        "playlist-read-collaborative",
-        "user-follow-read",
-        "user-read-playback-position",
-        "user-top-read",
-        "user-read-recently-played",
         "user-library-read",
         "user-read-email",
         "user-read-currently-playing",
@@ -40,11 +46,18 @@ async def getCurator(curator_id: str, settings: Settings = Depends(get_settings)
     return curator
 
 
-@router.get("/v1/curators/{curator_id}/importantTracks")
+@router.get("/v1/curators/{curator_id}/curatorTracks")
 async def getCuratorsImportantTracks(
     curator_id: str, settings: Settings = Depends(get_settings)
 ):
-    try:
-        return await get_curators_important_tracks(curator_id=curator_id)
-    except ItemNotFoundException:
-        return HTTPException(status_code=404, detail="Curator not found")
+    print(curator_id)
+    return await CuratorTrack_Pydantic_List.from_queryset(
+        CuratorTrack.filter(curator_id=curator_id)
+    )
+
+
+@router.post("/v1/curators/{curator_id}/refreshCuratorTracks")
+async def refreshCuratorTracks(
+    curator_id: str, settings: Settings = Depends(get_settings)
+):
+    return await refresh_curators_important_tracks(curator_id=curator_id)

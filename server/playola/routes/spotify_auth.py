@@ -1,7 +1,7 @@
-from app.config import Settings, get_settings
-from app.lib.curator import get_or_create_curator
 from fastapi import APIRouter, Depends
 from fastapi.responses import RedirectResponse
+from playola.config import Settings, get_settings
+from playola.lib.curator import get_or_create_curator
 from spotipy import oauth2
 from starlette import status
 
@@ -30,14 +30,14 @@ async def spotifyAuthCode(code: str, settings: Settings = Depends(get_settings))
         settings.spotify_client_secret,
         f"{settings.base_url}/v1/auth/spotify/code",
         scope=scopes,
-        cache_path=".spotipyoauthcache",
     )
     response = sp_oauth.get_access_token(code)
     print(f"client_base_url {settings.client_base_url}")
+    curator = await get_or_create_curator(token_info=response)
     return RedirectResponse(
-        f"{settings.client_base_url}/curatorSignedIn", status_code=status.HTTP_302_FOUND
+        f"{settings.client_base_url}/curators/{curator.id}",
+        status_code=status.HTTP_302_FOUND,
     )
-    return await get_or_create_curator(token_info=response)
 
 
 @router.get("/v1/auth/spotify/authorize")

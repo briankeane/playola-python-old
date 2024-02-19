@@ -1,4 +1,4 @@
-from app import main
+from playola import main
 
 
 def test_ping(test_app):

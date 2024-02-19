@@ -1,9 +1,10 @@
 import logging
 
-from app.api import curators, healthcheck, spotify_auth
-from app.db import init_db
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from playola.db import init_db
+from playola.db import init_db
+from playola.routes import curators, healthcheck, spotify_auth
 
 log = logging.getLogger("uvicorn")
 
