@@ -3,14 +3,17 @@ import json
 from typing import Optional
 
 import spotipy
+
 from playola.lib.errors import ItemNotFoundException
 from playola.lib.spotipy_extensions import UserSpecificSpotify
 from playola.models.tortoise import Curator, CuratorTrack, Track
 
 
 async def get_or_create_curator(token_info: dict) -> Curator:
+    print(token_info)
     sp = spotipy.Spotify(auth=token_info["access_token"])
     user = sp.current_user()
+    print("user", user)
     (curator, created) = await Curator.get_or_create(
         spotify_user_id=user["id"],
         defaults={
@@ -70,8 +73,7 @@ async def refresh_curators_important_tracks(curator_id: str):
         await track.fetch_related("curator", "track")
         curator_tracks.append(track)
 
-    return await CuratorTrack.filter(curator_id=curator_id).prefetch_related("tracks")
-    return curator_tracks
+    return await CuratorTrack.filter(curator_id=curator_id).select_related("track")
 
 
 def parse_album(track_info) -> str:

@@ -21,7 +21,7 @@ class Curator(models.Model):
 
 
 class Track(models.Model):
-    spotify_id = fields.CharField(max_length=512)
+    spotify_id = fields.CharField(max_length=512, unique=True)
     album = fields.CharField(max_length=512)
     artist = fields.CharField(max_length=512)
     duration_ms = fields.IntField()
@@ -35,7 +35,6 @@ class CuratorTrack(models.Model):
     curator = fields.ForeignKeyField("models.Curator", related_name="curator_tracks")
     track = fields.ForeignKeyField("models.Track", related_name="curator_tracks")
     status = fields.CharField(max_length=512)
-    approved = fields.BooleanField(null=True)
 
 
 Tortoise.init_models(["playola.models.tortoise"], "models")

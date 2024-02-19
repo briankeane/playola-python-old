@@ -46,18 +46,18 @@ async def getCurator(curator_id: str, settings: Settings = Depends(get_settings)
     return curator
 
 
-@router.get("/v1/curators/{curator_id}/importantTracks")
+@router.get("/v1/curators/{curator_id}/curatorTracks")
 async def getCuratorsImportantTracks(
     curator_id: str, settings: Settings = Depends(get_settings)
 ):
+    print(curator_id)
     return await CuratorTrack_Pydantic_List.from_queryset(
-        CuratorTrack.filter(curator_id=curator_id).select_related("track")
+        CuratorTrack.filter(curator_id=curator_id)
     )
-    # return await Track.all()
-    return await CuratorTrack.filter(curator_id=curator_id).select_related(
-        "track", "curator"
-    )
-    try:
-        return await refresh_curators_important_tracks(curator_id=curator_id)
-    except ItemNotFoundException:
-        return HTTPException(status_code=404, detail="Curator not found")
+
+
+@router.post("/v1/curators/{curator_id}/refreshCuratorTracks")
+async def refreshCuratorTracks(
+    curator_id: str, settings: Settings = Depends(get_settings)
+):
+    return await refresh_curators_important_tracks(curator_id=curator_id)

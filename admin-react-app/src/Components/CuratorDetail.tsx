@@ -10,15 +10,21 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 
-interface Track {
+interface CuratorTrack {
     id: string
-    name: string
-    artists: [Artist]
-    popularity: number
+    track: Track
+    status: string
 }
 
-interface Artist {
-    name: string
+interface Track {
+    spotify_id: string
+    album: string
+    artist: string
+    duration_ms: number
+    isrc: string
+    title: string
+    popularity: number
+    spotify_image_link: string
 }
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -42,18 +48,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function CuratorDetail() {
-  const [importantTracks, setImportantTracks] = useState<Track[]>([]);
+  const [curatorTracks, setCuratorTracks] = useState<CuratorTrack[]>([]);
 
   const { curatorId } = useParams();
 
   useEffect(() => {
     const fetchCurators = async () => {
-      console.log( `${import.meta.env.VITE_BACKEND_BASE_URL}v1/curators/${curatorId}/importantTracks`)
       const result = await axios.get(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/v1/curators/${curatorId}/importantTracks`
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/v1/curators/${curatorId}/curatorTracks`
       );
       console.log(result);
-      setImportantTracks(result.data);
+      if (!result?.data?.length) {
+        const result = await axios.post(
+          `${import.meta.env.VITE_BACKEND_BASE_URL}/v1/curators/${curatorId}/refreshCuratorTracks`
+        );
+        setCuratorTracks(result.data);
+      }
+      setCuratorTracks(result.data);
     };
     fetchCurators();
   }, [curatorId]);
@@ -70,16 +81,16 @@ function CuratorDetail() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {importantTracks.map((track) => (
-              <StyledTableRow key={track.id}>
+            {curatorTracks.map((curatorTrack) => (
+              <StyledTableRow key={curatorTrack.id}>
                 <StyledTableCell component="th" scope="row">
-                  {track.name}
+                  {curatorTrack.track.title}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {track.artists[0].name}
+                  {curatorTrack.track.artist}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {track.popularity}
+                  {curatorTrack.track.popularity}
                 </StyledTableCell>
               </StyledTableRow>
             ))}
