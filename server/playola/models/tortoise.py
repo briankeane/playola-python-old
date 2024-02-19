@@ -1,4 +1,13 @@
-from tortoise import fields, models
+import json
+
+from tortoise import Tortoise, fields, models
+from tortoise.contrib.pydantic import pydantic_model_creator, pydantic_queryset_creator
+
+
+class CuratorTrackStatus:
+    approved = "approved"
+    denied = "denied"
+    new = "new"
 
 
 class Curator(models.Model):
@@ -25,5 +34,12 @@ class Track(models.Model):
 class CuratorTrack(models.Model):
     curator = fields.ForeignKeyField("models.Curator", related_name="curator_tracks")
     track = fields.ForeignKeyField("models.Track", related_name="curator_tracks")
+    status = fields.CharField(max_length=512)
     approved = fields.BooleanField(null=True)
-    date_last_seen = fields.DateField()
+
+
+Tortoise.init_models(["playola.models.tortoise"], "models")
+
+CuratorTrack_Pydantic = pydantic_model_creator(CuratorTrack)
+print(json.dumps(CuratorTrack_Pydantic.schema(), indent=4))
+CuratorTrack_Pydantic_List = pydantic_queryset_creator(CuratorTrack)

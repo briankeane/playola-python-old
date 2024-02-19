@@ -20,6 +20,7 @@ TORTOISE_ORM = {
 
 
 def init_db(app: FastAPI) -> None:
+    Tortoise.init_models(["playola.models.tortoise"], "models")
     register_tortoise(
         app,
         db_url=os.environ.get("DATABASE_URL"),

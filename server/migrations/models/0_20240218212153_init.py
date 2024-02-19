@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS "track" (
 );
 CREATE TABLE IF NOT EXISTS "curatortrack" (
     "id" SERIAL NOT NULL PRIMARY KEY,
+    "status" VARCHAR(512) NOT NULL,
     "approved" BOOL,
-    "date_last_seen" DATE NOT NULL,
     "curator_id" INT NOT NULL REFERENCES "curator" ("id") ON DELETE CASCADE,
     "track_id" INT NOT NULL REFERENCES "track" ("id") ON DELETE CASCADE
 );
