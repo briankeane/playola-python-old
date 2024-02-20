@@ -31,8 +31,10 @@ async def spotifyAuthCode(code: str, settings: Settings = Depends(get_settings))
         f"{settings.base_url}/v1/auth/spotify/code",
         scope=scopes,
     )
-    response = sp_oauth.get_access_token(code)
+    response = sp_oauth.get_access_token(code, check_cache=False)
     print(f"client_base_url {settings.client_base_url}")
+    print("code: ", code)
+    print("response: ", response)
     curator = await get_or_create_curator(token_info=response)
     return RedirectResponse(
         f"{settings.client_base_url}/curators/{curator.id}",
