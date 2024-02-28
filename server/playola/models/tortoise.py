@@ -40,5 +40,4 @@ class CuratorTrack(models.Model):
 Tortoise.init_models(["playola.models.tortoise"], "models")
 
 CuratorTrack_Pydantic = pydantic_model_creator(CuratorTrack)
-print(json.dumps(CuratorTrack_Pydantic.schema(), indent=4))
 CuratorTrack_Pydantic_List = pydantic_queryset_creator(CuratorTrack)
